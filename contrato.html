@@ -70,6 +70,7 @@
         display: flex;
         justify-content: center;
         gap: 20px;
+        flex-wrap: wrap;
       }
       .buttons button {
         padding: 15px 30px;
@@ -83,14 +84,24 @@
         position: relative;
         white-space: nowrap;
       }
-      .buttons button:hover {
-        background: #f0e6f8;
+      #noBtn {
+        background: #ff4d4d;
+        color: #fff;
+      }
+      #noBtn:hover {
+        background: #e04343;
       }
       .congrats {
         text-align: center;
         font-size: 2em;
         color: #333;
         display: none;
+      }
+      #reverseMessage {
+        margin-top: 10px;
+        font-size: 1.2em;
+        color: #333;
+        display: block;
       }
     </style>
   </head>
@@ -112,10 +123,11 @@
           <button id="yesBtn">Sim</button>
           <button id="noBtn">Não</button>
         </div>
+        <p id="reverseMessage">Você tem coragem de clicar em "Não"?</p>
       </div>
       <div class="congrats" id="congrats">
-        <h1>Parabéns!</h1>
-        <p>Mais um ano de namoro e muita felicidade juntos!</p>
+        <h1>Come Amoraaaaaa!</h1>
+        <p>Mais um ano de namoro e muita MUITA felicidade juntos!</p>
       </div>
     </div>
 
@@ -125,7 +137,6 @@
       const contract = document.getElementById("contract");
       const congrats = document.getElementById("congrats");
 
-      // Usa as dimensões do container do contrato para limitar o movimento
       noBtn.addEventListener("mouseenter", () => {
         const contractWidth = contract.offsetWidth;
         const contractHeight = contract.offsetHeight;
