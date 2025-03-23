@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fotos Favoritas - Formato Fixo e Rolagem em 2 Colunas Intercaladas</title>
+    <style>
+      * {
+        background-color: #fff0f5;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        font-family: "Georgia", serif;
+        background-color: #fff;
+      }
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: #fff;
+        text-align: center;
+        padding: 15px 0;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        z-index: 9999;
+      }
+      nav ul {
+        background: #fff;
+        list-style: none;
+      }
+      nav li {
+        
+        display: inline-block;
+        margin: 0 15px;
+      }
+      nav a {
+        background: #fff;
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+      }
+      /* Container que ocupa toda a altura da viewport, com fundo igual aos painéis */
+      .container {
+        display: flex;
+        height: calc(100vh - 60px);
+        padding-top: 60px; /* espaço para a navbar */
+        background-color: #fff0f5;
+      }
+      /* Coluna esquerda fixa com texto */
+      .left {
+        flex: 0 0 40%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 40px;
+        position: sticky;
+        top: 60px;
+        height: calc(100vh - 60px);
+      }
+      .left h1 {
+        font-size: 3em;
+        margin-bottom: 10px;
+      }
+      .left p {
+        font-size: 1.2em;
+        max-width: 80%;
+      }
+      /* Coluna direita rolável */
+      .right {
+        flex: 1;
+        height: calc(100vh - 60px);
+        overflow-y: auto;
+        padding: 40px;
+        background-color: #fff0f5;
+      }
+      /* Container das fotos dividido em duas colunas */
+      .photos {
+        display: flex;
+        gap: 20px;
+      }
+      /* Cada coluna é uma div flex vertical */
+      .left-col,
+      .right-col {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 50%;
+      }
+      .left-col img,
+      .right-col img {
+        width: 100%;
+        aspect-ratio: 3 / 4;
+        object-fit: cover;
+        border-radius: 10px;
+        display: block;
+      }
+      /* Offset para layout intercalado (opcional, ajuste conforme necessário) */
+      .left-col img:nth-child(even) {
+        margin-top: 50%;
+      }
+      .right-col img:nth-child(odd) {
+        margin-top: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="fotos.html">Fotos Favoritas</a></li>
+        <li><a href="musicas.html">Nossas Músicas</a></li>
+        <li><a href="contrato.html">Contrato de namoro</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <!-- Coluna esquerda fixa (texto) -->
+      <div class="left">
+        <h1>Fotos Favoritas do meu amor!</h1>
+        <p>Estão aqui, algumas das fotos que sempre me fazem lembrar quanto você é linda e o quanto eu te amo!!</p>
+      </div>
+      <!-- Coluna direita rolável (fotos) -->
+      <div class="right">
+        <div class="photos">
+          <!-- Coluna 1 -->
+          <div class="left-col" id="left-col"></div>
+          <!-- Coluna 2 -->
+          <div class="right-col" id="right-col"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Seleciona as colunas
+      const leftCol = document.getElementById("left-col");
+      const rightCol = document.getElementById("right-col");
+
+      // Loop para criar imagens de nós\1.jpg até nós\82.jpg, distribuídas alternadamente
+      for (let i = 1; i <= 82; i++) {
+        const img = document.createElement("img");
+        // Utilize a formatação de caminho conforme especificado
+        img.src = `nós\\${i}.jpg`;
+        img.alt = `Foto ${i}`;
+
+        // Distribuir alternadamente: ímpar na coluna esquerda, par na coluna direita
+        if (i % 2 === 1) {
+          leftCol.appendChild(img);
+        } else {
+          rightCol.appendChild(img);
+        }
+      }
+    </script>
+  </body>
+</html>

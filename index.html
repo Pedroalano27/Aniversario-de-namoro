@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>História de Amor - Apresentação Vertical</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        font-family: "Georgia", serif;
+        background-color: #fff;
+        position: relative;
+      }
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: #fff;
+        text-align: center;
+        padding: 15px 0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+      }
+      nav ul {
+        list-style: none;
+      }
+      nav li {
+        display: inline-block;
+        margin: 0 15px;
+      }
+      nav a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+      }
+      .slide {
+        width: 100%;
+        height: 100vh;
+        position: absolute;
+        left: 0;
+        top: 100%;
+        transition: top 0.8s ease;
+        background: linear-gradient(135deg, #ffe6f2 0%, #f8bbd0 100%);
+        overflow: hidden;
+      }
+      .slide.active {
+        top: 0;
+      }
+      .slide.exit {
+        top: -100%;
+      }
+      .slide.exit-back {
+        top: 100%;
+      }
+      .content {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 20px;
+      }
+      .content h2 {
+        font-size: 3em;
+        margin-bottom: 20px;
+        margin-top: 80px;
+        max-width: 80%;
+        color: #c2185b;
+      }
+      .content p {
+        font-size: 1.5em;
+        margin-bottom: 30px;
+        max-width: 80%;
+        color: #424242;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="fotos.html">Fotos Favoritas</a></li>
+        <li><a href="musicas.html">Nossas Músicas</a></li>
+        <li><a href="contrato.html">Contrato de namoro</a></li>
+      </ul>
+    </nav>
+    <div id="slidesContainer"></div>
+    <script>
+      const slidesData = [
+        {
+          title: "Feliz 3 anos que você disse sim para mim!!",
+          text: "Há 3 anos, nessa mesma data, estávamos deitados naquela cama e gritando para o outro o quanto se amava, sem dizer uma palavra, apenas com aquele olhar de adolescente apaixonado."
+        },
+        {
+          title: "O início",
+          text: "Depois daquele \"SIM\", se iniciava tudo que eu havia sonhado, mas não sabia que iria acontecer: que você se tornaria a companheira da minha vida e a mulher que não sairia da minha mente nem por um segundo."
+        },
+        {
+          title: "A mulher mais linda do mundo",
+          text: "Ao mesmo tempo em que a ficha ia caindo, parecia mais irreal que a mulher com o sorriso mais lindo, que me hipnotizou com o olhar mais encantador de todo esse mundo desde a primeira vez que eu a vi, e da qual só consegui desviar o olhar para ver seu cabelo gigante e maravilhoso, com algumas mechas claras, estava querendo ser minha (I Wanna Be Yours)."
+        },
+        {
+          title: "O amadurecimento",
+          text: "Com o passar dos anos, todo aquele tempo que tínhamos juntos começou a ficar mais escasso. O que foi angústia no primeiro momento serviu para mostrar que o amor não está apenas nos momentos em que estamos agarrados pelos corredores de alguma instituição de ensino, e que uma foto atual pode ser uma declaração de amor, além de tornar os momentos em que sentimos o calor um do outro muito mais intensos e felizes."
+        },
+        {
+          title: "Os sonhos",
+          text: "Ter você ao meu lado enquanto eu ia conquistando meus sonhos e objetivos, e fazer dos seus sonhos os meus, representa muito os nossos últimos anos juntos e me mostrou que não existe paisagem mais linda do que o seu sorriso a cada conquista realizada."
+        },
+        {
+          title: "Eu te amo!!!!",
+          text: "Para finalizar, só queria dizer que eu te amo, te amo mais do que você imagina e mais do que já imaginei poder amar. É com você que eu sonhei e sonho todas as noites. Você fez parte dos melhores momentos da minha vida, e espero e farei de tudo para que faça parte de todos os que vêm pela frente. Te amo mil milhões, e obrigado por esses 3 anos maravilhosos."
+        }
+      ];
+      const slidesContainer = document.getElementById("slidesContainer");
+      slidesData.forEach((slide, index) => {
+        const slideDiv = document.createElement("div");
+        slideDiv.classList.add("slide");
+        if (index === 0) slideDiv.classList.add("active");
+        slideDiv.innerHTML = `
+          <div class="content">
+            <h2>${slide.title}</h2>
+            <p>${slide.text}</p>
+          </div>
+        `;
+        slidesContainer.appendChild(slideDiv);
+      });
+      let currentSlide = 0;
+      let isTransitioning = false;
+      const slides = document.querySelectorAll(".slide");
+      function showSlide(newIndex, direction) {
+        if (isTransitioning || newIndex < 0 || newIndex >= slides.length) return;
+        isTransitioning = true;
+        const current = slides[currentSlide];
+        const next = slides[newIndex];
+        if (direction === "next") {
+          current.classList.remove("active");
+          current.classList.add("exit");
+          next.classList.remove("exit", "exit-back");
+          next.classList.add("active");
+        } else if (direction === "prev") {
+          current.classList.remove("active");
+          current.classList.add("exit-back");
+          next.classList.remove("exit", "exit-back");
+          next.classList.add("active");
+        }
+        currentSlide = newIndex;
+        setTimeout(() => {
+          current.classList.remove("exit", "exit-back");
+          isTransitioning = false;
+        }, 900);
+      }
+      function handleNavigation(e) {
+        if (e.type === "wheel") {
+          if (e.deltaY > 0) {
+            showSlide(currentSlide + 1, "next");
+          } else if (e.deltaY < 0) {
+            showSlide(currentSlide - 1, "prev");
+          }
+        }
+        if (e.type === "keydown") {
+          if (e.key === "ArrowDown") {
+            showSlide(currentSlide + 1, "next");
+          }
+          if (e.key === "ArrowUp") {
+            showSlide(currentSlide - 1, "prev");
+          }
+        }
+      }
+      window.addEventListener("wheel", handleNavigation, { passive: true });
+      window.addEventListener("keydown", handleNavigation);
+    </script>
+  </body>
+</html>

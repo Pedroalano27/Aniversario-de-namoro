@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Contrato de Namoro</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        font-family: "Georgia", serif;
+        background-color: #fff;
+      }
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: #fff;
+        text-align: center;
+        padding: 15px 0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+      }
+      nav ul {
+        list-style: none;
+      }
+      nav li {
+        display: inline-block;
+        margin: 0 15px;
+      }
+      nav a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+      }
+      .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        padding-top: 60px;
+        background: linear-gradient(135deg, #ffe6f2, #f8bbd0);
+        position: relative;
+      }
+      .contract {
+        text-align: center;
+        background: rgba(255, 255, 255, 0.9);
+        padding: 40px;
+        border-radius: 20px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        overflow: hidden;
+      }
+      .contract h1 {
+        font-size: 2.5em;
+        margin-bottom: 20px;
+      }
+      .contract p {
+        font-size: 1.5em;
+        margin-bottom: 30px;
+      }
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+      }
+      .buttons button {
+        padding: 15px 30px;
+        font-size: 1.4em;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        background: #fff;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: background 0.3s;
+        position: relative;
+        white-space: nowrap;
+      }
+      .buttons button:hover {
+        background: #f0e6f8;
+      }
+      .congrats {
+        text-align: center;
+        font-size: 2em;
+        color: #333;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="fotos.html">Fotos Favoritas</a></li>
+        <li><a href="musicas.html">Nossas Músicas</a></li>
+        <li><a href="contrato.html">Contrato de namoro</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <div class="contract" id="contract">
+        <h1>Contrato de Namoro</h1>
+        <p>Você aceita ser minha por mais um ano?</p>
+        <div class="buttons">
+          <button id="yesBtn">Sim</button>
+          <button id="noBtn">Não</button>
+        </div>
+      </div>
+      <div class="congrats" id="congrats">
+        <h1>Parabéns!</h1>
+        <p>Mais um ano de namoro e muita felicidade juntos!</p>
+      </div>
+    </div>
+
+    <script>
+      const noBtn = document.getElementById("noBtn");
+      const yesBtn = document.getElementById("yesBtn");
+      const contract = document.getElementById("contract");
+      const congrats = document.getElementById("congrats");
+
+      // Usa as dimensões do container do contrato para limitar o movimento
+      noBtn.addEventListener("mouseenter", () => {
+        const contractWidth = contract.offsetWidth;
+        const contractHeight = contract.offsetHeight;
+        const btnWidth = noBtn.offsetWidth;
+        const btnHeight = noBtn.offsetHeight;
+        const maxX = contractWidth - btnWidth;
+        const maxY = contractHeight - btnHeight;
+        const randomX = Math.floor(Math.random() * maxX);
+        const randomY = Math.floor(Math.random() * maxY);
+        noBtn.style.position = "absolute";
+        noBtn.style.left = randomX + "px";
+        noBtn.style.top = randomY + "px";
+      });
+
+      yesBtn.addEventListener("click", () => {
+        contract.style.display = "none";
+        congrats.style.display = "block";
+      });
+    </script>
+  </body>
+</html>

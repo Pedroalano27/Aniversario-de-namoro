@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Nossas Músicas</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 100%;
+        height: 100%;
+        font-family: "Georgia", serif;
+        background-color: #f2e5ff;
+      }
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: #fff;
+        text-align: center;
+        padding: 15px 0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        z-index: 9999;
+      }
+      nav ul {
+        list-style: none;
+      }
+      nav li {
+        display: inline-block;
+        margin: 0 15px;
+      }
+      nav a {
+        text-decoration: none;
+        color: #333;
+        font-weight: bold;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        height: 100%;
+        padding-top: 80px; /* espaço para a navbar */
+      }
+      h1 {
+        font-size: 2.5em;
+        margin-bottom: 20px;
+      }
+      .intro-text {
+        font-size: 1.2em;
+        text-align: center;
+        max-width: 80%;
+        margin: 0 auto 40px auto;
+      }
+      .player-card {
+        background-color: #c9b6ff;
+        border-radius: 20px;
+        width: 400px;
+        padding: 30px;
+        text-align: center;
+        position: relative;
+      }
+      .cover-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+      }
+      .cover-container img {
+        width: 200px;
+        height: 200px;
+        border-radius: 10px;
+        object-fit: cover;
+      }
+      .nav-button {
+        background: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 1.5em;
+        margin: 0 10px;
+        cursor: pointer;
+        font-weight: bold;
+        transition: background 0.3s;
+      }
+      .nav-button:hover {
+        background-color: #e6d9f8;
+      }
+      #playPauseBtn {
+        background: #fff;
+        border: none;
+        border-radius: 50%;
+        width: 60px;
+        height: 60px;
+        font-size: 1.5em;
+        cursor: pointer;
+        font-weight: bold;
+        margin-bottom: 15px;
+        transition: background 0.3s;
+      }
+      #playPauseBtn:hover {
+        background-color: #e6d9f8;
+      }
+      .controls {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 10px 0;
+      }
+      #progress {
+        flex: 1;
+        margin: 0 10px;
+      }
+      #song-desc {
+        font-size: 0.9em;
+        margin-top: 10px;
+      }
+      .music-visualizer {
+        display: flex;
+        justify-content: center;
+        align-items: end;
+        gap: 5px;
+        margin-top: 20px;
+        height: 60px;
+      }
+      .music-visualizer span {
+        width: 6px;
+        background: #fff;
+        border-radius: 3px;
+        height: 10px;
+        animation: none;
+      }
+      .music-visualizer.playing span {
+        animation: beat 1s infinite ease-in-out alternate;
+      }
+      .music-visualizer.playing span:nth-child(2) {
+        animation-delay: 0.2s;
+      }
+      .music-visualizer.playing span:nth-child(3) {
+        animation-delay: 0.4s;
+      }
+      .music-visualizer.playing span:nth-child(4) {
+        animation-delay: 0.6s;
+      }
+      .music-visualizer.playing span:nth-child(5) {
+        animation-delay: 0.8s;
+      }
+      @keyframes beat {
+        from {
+          height: 10px;
+        }
+        to {
+          height: 50px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="index.html">Início</a></li>
+        <li><a href="fotos.html">Fotos Favoritas</a></li>
+        <li><a href="musicas.html">Nossas Músicas</a></li>
+        <li><a href="contrato.html">Contrato de namoro</a></li>
+      </ul>
+    </nav>
+
+    <div class="container">
+      <h1>Nossas Músicas</h1>
+      <p class="intro-text">Desde quando nos conhecemos a música foi muito presente na nossa relação, aqui estão algumas delas</p>
+
+      <div class="player-card">
+        <div class="cover-container">
+          <button id="prevBtn" class="nav-button">«</button>
+          <img id="cover" src="1900x1900-000000-80-0-0.jpg" alt="Capa da música" />
+          <button id="nextBtn" class="nav-button">»</button>
+        </div>
+
+        <button id="playPauseBtn">▶</button>
+
+        <div class="controls">
+          <span id="current-time">0:00</span>
+          <input type="range" id="progress" min="0" max="100" value="0" />
+          <span id="duration">0:00</span>
+        </div>
+
+        <h2 id="song-title"></h2>
+        <p id="song-desc"></p>
+        <audio id="audio" src=""></audio>
+
+        <div id="visualizer" class="music-visualizer">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const songs = [
+        {
+          title: "I Wanna Be Yours",
+          audio: "I Wanna Be Yours.mp3",
+          cover: "1900x1900-000000-80-0-0.jpg",
+          desc: "A nossa primeira música, a que mostrou para mim que o quanto você me queria.",
+        },
+        {
+          title: "Yellow",
+          audio: "Coldplay - Yellow (Official Video).mp3",
+          cover: "download.jpeg",
+          desc: "Sempre que escuto, me lembro dos nossos momentos pela varandinha no prédio 4.",
+        },
+        {
+          title: "Until I Found You",
+          audio: "Stephen Sanchez - Until I Found You (Official Video).mp3",
+          cover: "ab67616d0000b2738792c3e96f8ab97a767c5d0c.jpeg",
+          desc: "Considero essa a trilha sonora do meu sentimento por você.",
+        },
+        {
+          title: "All I Wanted",
+          audio: "Paramore - All I Wanted (Official Audio).mp3",
+          cover: "download (1).jpeg",
+          desc: "Você sabe me fazer sentir especial com uma música.",
+        },
+        {
+          title: "Amor Pra Recomeçar",
+          audio: "Amor pra recomeçar.mp3",
+          cover: "download (2).jpeg",
+          desc: "Você me mostrou essa música em um momento muito importante da minha vida. Acho que ela diz muito sobre o nosso amadurecimento.",
+        },
+        {
+          title: "Bed Chem",
+          audio: "Sabrina Carpenter - Bed Chem (Official Lyric Video).mp3",
+          cover: "download (3).jpeg",
+          desc: "Tinha que ter uma da baixinha né? kkkk. E ela conta um pouco da nossa história.",
+        },
+      ];
+
+      let currentSongIndex = 0;
+      const audio = document.getElementById("audio");
+      const cover = document.getElementById("cover");
+      const titleEl = document.getElementById("song-title");
+      const descEl = document.getElementById("song-desc");
+      const playPauseBtn = document.getElementById("playPauseBtn");
+      const prevBtn = document.getElementById("prevBtn");
+      const nextBtn = document.getElementById("nextBtn");
+      const currentTimeEl = document.getElementById("current-time");
+      const durationEl = document.getElementById("duration");
+      const progress = document.getElementById("progress");
+      const visualizer = document.getElementById("visualizer");
+
+      function loadSong(index) {
+        const song = songs[index];
+        audio.src = song.audio;
+        cover.src = song.cover;
+        titleEl.textContent = song.title;
+        descEl.textContent = song.desc;
+        audio.load();
+      }
+
+      function playSong() {
+        audio.play();
+        playPauseBtn.textContent = "⏸";
+        visualizer.classList.add("playing");
+      }
+
+      function pauseSong() {
+        audio.pause();
+        playPauseBtn.textContent = "▶";
+        visualizer.classList.remove("playing");
+      }
+
+      function updateProgress() {
+        const current = audio.currentTime;
+        const total = audio.duration;
+        progress.value = (current / total) * 100 || 0;
+        currentTimeEl.textContent = formatTime(current);
+        durationEl.textContent = formatTime(total);
+      }
+
+      function formatTime(time) {
+        if (isNaN(time)) return "0:00";
+        const minutes = Math.floor(time / 60);
+        const seconds = Math.floor(time % 60);
+        return `${minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+      }
+
+      function nextSong() {
+        currentSongIndex = (currentSongIndex + 1) % songs.length;
+        loadSong(currentSongIndex);
+        playSong();
+      }
+
+      function prevSong() {
+        currentSongIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+        loadSong(currentSongIndex);
+        playSong();
+      }
+
+      playPauseBtn.addEventListener("click", () => {
+        if (audio.paused) {
+          playSong();
+        } else {
+          pauseSong();
+        }
+      });
+      nextBtn.addEventListener("click", nextSong);
+      prevBtn.addEventListener("click", prevSong);
+      audio.addEventListener("timeupdate", updateProgress);
+      audio.addEventListener("ended", nextSong);
+      progress.addEventListener("input", (e) => {
+        const newTime = (audio.duration * e.target.value) / 100;
+        audio.currentTime = newTime;
+      });
+
+      // Carrega a primeira música, mas por padrão, a música permanece pausada
+      loadSong(currentSongIndex);
+    </script>
+  </body>
+</html>
