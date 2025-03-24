@@ -2,7 +2,7 @@
 <html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>História de Amor - Apresentação Vertical</title>
     <style>
       * {
@@ -84,6 +84,26 @@
         max-width: 80%;
         color: #424242;
       }
+      /* Indicações de navegação */
+      .navigation-hint {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 1em;
+        font-weight: bold;
+        color: #c2185b;
+        animation: pulse 1.5s infinite;
+      }
+      @keyframes pulse {
+        0%   { opacity: 0.2; }
+        50%  { opacity: 1; }
+        100% { opacity: 0.2; }
+      }
+      /* Setas simples para cima/baixo */
+      .arrow {
+        display: block;
+      }
     </style>
   </head>
   <body>
@@ -95,7 +115,9 @@
         <li><a href="contrato.html">Contrato de namoro</a></li>
       </ul>
     </nav>
+
     <div id="slidesContainer"></div>
+
     <script>
       const slidesData = [
         {
@@ -123,28 +145,63 @@
           text: "Para finalizar, só queria dizer que eu te amo, te amo mais do que você imagina e mais do que já imaginei poder amar. É com você que eu sonhei e sonho todas as noites. Você fez parte dos melhores momentos da minha vida, e espero e farei de tudo para que faça parte de todos os que vêm pela frente. Te amo mil milhões, e obrigado por esses 3 anos maravilhosos."
         }
       ];
+
       const slidesContainer = document.getElementById("slidesContainer");
       slidesData.forEach((slide, index) => {
         const slideDiv = document.createElement("div");
         slideDiv.classList.add("slide");
         if (index === 0) slideDiv.classList.add("active");
+
+        // Cria o conteúdo
         slideDiv.innerHTML = `
           <div class="content">
             <h2>${slide.title}</h2>
             <p>${slide.text}</p>
+            <div class="navigation-hint" id="hint-${index}">
+              <!-- Este hint será atualizado dinamicamente no JavaScript -->
+            </div>
           </div>
         `;
         slidesContainer.appendChild(slideDiv);
       });
+
       let currentSlide = 0;
       let isTransitioning = false;
       let lastScrollTime = 0;
       const slides = document.querySelectorAll(".slide");
+
+      function updateHints() {
+        slides.forEach((slide, i) => {
+          const hint = slide.querySelector(".navigation-hint");
+          if (!hint) return;
+
+          // Limpa qualquer texto anterior
+          hint.textContent = "";
+
+          // Se for o primeiro slide, não pode subir
+          if (i === 0) {
+            // Existe proximo slide?
+            if (i < slides.length - 1) {
+              hint.innerHTML = "Role ou aperte ↓ para continuar";
+            }
+          }
+          // Se for o último slide, não pode descer
+          else if (i === slides.length - 1) {
+            hint.innerHTML = "Role ou aperte ↑ para voltar";
+          } 
+          // Slides do meio
+          else {
+            hint.innerHTML = "Role ou aperte ↓ ou ↑ para navegar";
+          }
+        });
+      }
+
       function showSlide(newIndex, direction) {
         if (isTransitioning || newIndex < 0 || newIndex >= slides.length) return;
         isTransitioning = true;
         const current = slides[currentSlide];
         const next = slides[newIndex];
+
         if (direction === "next") {
           current.classList.remove("active");
           current.classList.add("exit");
@@ -156,16 +213,21 @@
           next.classList.remove("exit", "exit-back");
           next.classList.add("active");
         }
+
         currentSlide = newIndex;
         setTimeout(() => {
           current.classList.remove("exit", "exit-back");
           isTransitioning = false;
+          updateHints();
         }, 900);
       }
+
       function handleNavigation(e) {
         const now = Date.now();
+        // Tempo de cooldown para nao pular slides muito rápido
         if (now - lastScrollTime < 800) return;
         lastScrollTime = now;
+
         if (e.type === "wheel") {
           if (e.deltaY > 0) {
             showSlide(currentSlide + 1, "next");
@@ -182,6 +244,10 @@
           }
         }
       }
+
+      // Inicializa as setas
+      updateHints();
+
       window.addEventListener("wheel", handleNavigation, { passive: true });
       window.addEventListener("keydown", handleNavigation);
     </script>
