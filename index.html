@@ -138,6 +138,7 @@
       });
       let currentSlide = 0;
       let isTransitioning = false;
+      let lastScrollTime = 0;
       const slides = document.querySelectorAll(".slide");
       function showSlide(newIndex, direction) {
         if (isTransitioning || newIndex < 0 || newIndex >= slides.length) return;
@@ -162,6 +163,9 @@
         }, 900);
       }
       function handleNavigation(e) {
+        const now = Date.now();
+        if (now - lastScrollTime < 800) return;
+        lastScrollTime = now;
         if (e.type === "wheel") {
           if (e.deltaY > 0) {
             showSlide(currentSlide + 1, "next");

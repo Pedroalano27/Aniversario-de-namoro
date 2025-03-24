@@ -39,14 +39,13 @@
         color: #333;
         font-weight: bold;
       }
-
       .container {
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
         height: 100%;
-        padding-top: 80px; /* espaço para a navbar */
+        padding-top: 80px;
       }
       h1 {
         font-size: 2.5em;
@@ -160,6 +159,23 @@
           height: 50px;
         }
       }
+      .spotify-button {
+        display: inline-block;
+        margin-top: 30px;
+      }
+      .spotify-button a {
+        display: inline-block;
+        background-color: #1db954;
+        color: #fff;
+        padding: 15px 25px;
+        border-radius: 30px;
+        text-decoration: none;
+        font-weight: bold;
+        transition: background 0.3s;
+      }
+      .spotify-button a:hover {
+        background-color: #159f46;
+      }
     </style>
   </head>
   <body>
@@ -201,6 +217,10 @@
           <span></span>
           <span></span>
           <span></span>
+        </div>
+
+        <div class="spotify-button">
+          <a href="https://open.spotify.com/playlist/0oDTvHdNDtiZzfMvtPlcY0?si=47c6f9fa214741f9" target="_blank">Ir para Playlist</a>
         </div>
       </div>
     </div>
@@ -322,7 +342,6 @@
         audio.currentTime = newTime;
       });
 
-      // Carrega a primeira música, mas por padrão, a música permanece pausada
       loadSong(currentSongIndex);
     </script>
   </body>

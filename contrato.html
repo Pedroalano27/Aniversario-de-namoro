@@ -15,7 +15,7 @@
         width: 100%;
         height: 100%;
         font-family: "Georgia", serif;
-        background-color: #fff;
+        background: #fff;
       }
       nav {
         position: fixed;
@@ -45,12 +45,14 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
-        padding-top: 60px;
         background: linear-gradient(135deg, #ffe6f2, #f8bbd0);
         position: relative;
-      }
-      .contract {
         text-align: center;
+      }
+      .hidden {
+        display: none;
+      }
+      .card {
         background: rgba(255, 255, 255, 0.9);
         padding: 40px;
         border-radius: 20px;
@@ -58,21 +60,21 @@
         position: relative;
         overflow: hidden;
       }
-      .contract h1 {
+      .card h1 {
         font-size: 2.5em;
         margin-bottom: 20px;
       }
-      .contract p {
+      .card p {
         font-size: 1.5em;
         margin-bottom: 30px;
       }
       .buttons {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        flex-wrap: wrap;
+        position: relative;
+        width: 400px;
+        height: 60px;
+        margin: 0 auto 20px auto;
       }
-      .buttons button {
+      button {
         padding: 15px 30px;
         font-size: 1.4em;
         border: none;
@@ -81,27 +83,48 @@
         background: #fff;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
         transition: background 0.3s;
-        position: relative;
         white-space: nowrap;
       }
+      #yesBtn {
+        position: absolute;
+        left: 25%;
+        top: 0;
+      }
       #noBtn {
+        position: absolute;
+        left: 65%;
+        top: 0;
         background: #ff4d4d;
         color: #fff;
       }
       #noBtn:hover {
         background: #e04343;
       }
-      .congrats {
-        text-align: center;
-        font-size: 2em;
-        color: #333;
-        display: none;
-      }
       #reverseMessage {
         margin-top: 10px;
         font-size: 1.2em;
         color: #333;
         display: block;
+      }
+      #yesBtn2 {
+        position: absolute;
+        left: 20%;
+        top: 0;
+      }
+      #noBtn2 {
+        position: absolute;
+        left: 60%;
+        top: 0;
+        background: #ff4d4d;
+        color: #fff;
+      }
+      #noBtn2:hover {
+        background: #e04343;
+      }
+      #congrats {
+        display: none;
+        font-size: 2em;
+        color: #333;
       }
     </style>
   </head>
@@ -115,43 +138,93 @@
       </ul>
     </nav>
 
-    <div class="container">
-      <div class="contract" id="contract">
+    <div id="screen1" class="container">
+      <div class="card">
         <h1>Contrato de Namoro</h1>
         <p>Você aceita ser minha pelo resto das nossas vidas?</p>
-        <div class="buttons">
+        <div class="buttons" id="buttons">
           <button id="yesBtn">Sim</button>
           <button id="noBtn">Não</button>
         </div>
         <p id="reverseMessage">Você tem coragem de clicar em "Não"?</p>
       </div>
-      <div class="congrats" id="congrats">
+      <div id="congrats">
         <h1>Come Amoraaaaaa!</h1>
         <p>Mais um ano de namoro e muita MUITA felicidade juntos!</p>
+      </div>
+    </div>
+
+    <div id="screen2" class="container hidden">
+      <div class="card">
+        <h1>Achou que seria fácil?</h1>
+        <div class="buttons" id="buttons2">
+          <button id="yesBtn2">Sim</button>
+          <button id="noBtn2">Não</button>
+        </div>
       </div>
     </div>
 
     <script>
       const noBtn = document.getElementById("noBtn");
       const yesBtn = document.getElementById("yesBtn");
-      const contract = document.getElementById("contract");
+      const contract = document.querySelector("#screen1 .card");
       const congrats = document.getElementById("congrats");
+      const buttons = document.getElementById("buttons");
+      const screen1 = document.getElementById("screen1");
+      const screen2 = document.getElementById("screen2");
+      const noBtn2 = document.getElementById("noBtn2");
+      const yesBtn2 = document.getElementById("yesBtn2");
+      const buttons2 = document.getElementById("buttons2");
 
       noBtn.addEventListener("mouseenter", () => {
-        const contractWidth = contract.offsetWidth;
-        const contractHeight = contract.offsetHeight;
+        const containerRect = buttons.getBoundingClientRect();
         const btnWidth = noBtn.offsetWidth;
         const btnHeight = noBtn.offsetHeight;
-        const maxX = contractWidth - btnWidth;
-        const maxY = contractHeight - btnHeight;
+        const maxX = containerRect.width - btnWidth;
+        const maxY = containerRect.height - btnHeight;
         const randomX = Math.floor(Math.random() * maxX);
         const randomY = Math.floor(Math.random() * maxY);
-        noBtn.style.position = "absolute";
         noBtn.style.left = randomX + "px";
         noBtn.style.top = randomY + "px";
       });
 
       yesBtn.addEventListener("click", () => {
+        contract.style.display = "none";
+        congrats.style.display = "block";
+      });
+
+      noBtn.addEventListener("click", () => {
+        screen1.classList.add("hidden");
+        screen2.classList.remove("hidden");
+      });
+
+      function distance(x1, y1, x2, y2) {
+        return Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
+      }
+
+      document.addEventListener("mousemove", (e) => {
+        if (!screen2.classList.contains("hidden")) {
+          const noRect = noBtn2.getBoundingClientRect();
+          const btnCenterX = noRect.left + noRect.width / 2;
+          const btnCenterY = noRect.top + noRect.height / 2;
+          const dist = distance(e.clientX, e.clientY, btnCenterX, btnCenterY);
+          if (dist < 100) {
+            const containerRect = buttons2.getBoundingClientRect();
+            const btnWidth = noBtn2.offsetWidth;
+            const btnHeight = noBtn2.offsetHeight;
+            const maxX = containerRect.width - btnWidth;
+            const maxY = containerRect.height - btnHeight;
+            let randomX = Math.floor(Math.random() * maxX);
+            let randomY = Math.floor(Math.random() * maxY);
+            noBtn2.style.left = randomX + "px";
+            noBtn2.style.top = randomY + "px";
+          }
+        }
+      });
+
+      yesBtn2.addEventListener("click", () => {
+        screen2.classList.add("hidden");
+        screen1.classList.remove("hidden");
         contract.style.display = "none";
         congrats.style.display = "block";
       });
